@@ -46,19 +46,19 @@ namespace No_Consolation
             shopSymbol
         }
 
-        public static Dictionary<symbolEnum, char> mapSymbols = new Dictionary<symbolEnum, char>(){
-        {symbolEnum.openSpace, ' '},
-        {symbolEnum.blockedSpace, '#'},
-        {symbolEnum.horizontal, '═'},
-        {symbolEnum.vertical, '║'},
-        {symbolEnum.entranceSymbol, 'O'},
-        {symbolEnum.exitSymbol, 'X'},
-        {symbolEnum.treasureSymbol, '$'},
-        {symbolEnum.enemySymbol, 'E'},
-        {symbolEnum.trapSymbol, 'T'},
-        {symbolEnum.spikeSymbol, '*'},
-        {symbolEnum.shopSymbol, '♫' }
-
+        public static Dictionary<symbolEnum, char> mapSymbols = new Dictionary<symbolEnum, char>()
+        {
+            {symbolEnum.openSpace, ' '},
+            {symbolEnum.blockedSpace, '#'},
+            {symbolEnum.horizontal, '═'},
+            {symbolEnum.vertical, '║'},
+            {symbolEnum.entranceSymbol, 'O'},
+            {symbolEnum.exitSymbol, 'X'},
+            {symbolEnum.treasureSymbol, '$'},
+            {symbolEnum.enemySymbol, 'E'},
+            {symbolEnum.trapSymbol, 'T'},
+            {symbolEnum.spikeSymbol, '*'},
+            {symbolEnum.shopSymbol, '♫' }
         };
 
         //private char _openSpace = ' ';
@@ -294,7 +294,7 @@ namespace No_Consolation
                     {
                         baseOfTrapObject = new MapObject(this, "Trap Base " + trapNumName, randomX, randomY, mapSymbols[symbolEnum.trapSymbol]);
                         mapObjects.Add(baseOfTrapObject);
-                        //_grid[baseOfTrapObject.x, baseOfTrapObject.y] = baseOfTrapObject._symbol;
+                        _grid[baseOfTrapObject.x, baseOfTrapObject.y] = baseOfTrapObject._symbol;
                         trapNumName++;
                         break;
                     }

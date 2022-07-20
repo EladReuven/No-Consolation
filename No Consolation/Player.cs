@@ -9,7 +9,6 @@ namespace No_Consolation
     public class Player
     {
 
-        Weapon playerWeapon;
         public CombatParameters playerCP;
 
         //grid stats

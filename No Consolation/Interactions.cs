@@ -160,6 +160,7 @@ namespace No_Consolation
             Console.WriteLine($"{enemy.PrintName()} attacks!");
             if(player.playerCP.IsAttackHit())
             {
+                Console.WriteLine("Enemy attack hit!");
                 player.playerCP.TakeDamage(enemy.enemyCombatParameters.GetDamage());
             }
             else
