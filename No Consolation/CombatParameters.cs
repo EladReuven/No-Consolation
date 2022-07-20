@@ -40,13 +40,8 @@ namespace No_Consolation
         
         public bool IsAttackHit()
         {
-            return _random.Next(0, 10) >= _dodgeChance;
+            return _random.Next(0,10) >= _dodgeChance;
         }
-
-        //public bool IsAttackHit(int num)
-        //{
-        //    return _random.Next(0, 10) >= _dodgeChance + num;
-        //}
 
         public void TakeDamage(int damage)
         {
@@ -56,41 +51,6 @@ namespace No_Consolation
             }
             else _currentHP -= damage;
         }
-
-        //public void TakeDamage(int damage, Shield shield)
-        //{
-        //    int damageAfterShield;
-        //    damageAfterShield = (int)(damage * shield.GetShieldBlockPercent());
-        //    Console.WriteLine(damage + " - damage before shield. " + damageAfterShield + " - damage after shield");
-        //    TakeDamage(damageAfterShield);
-        //}
-
-        //public void TakeDamage(Weapon weaponStats, bool dodgeActive)
-        //{
-        //    _tmpTotalDamage = 0;
-
-        //    //loop based on amout of attacks
-        //    for (int i = 0; i < weaponStats.GetWeaponAttackAmount(); i++)
-        //    {
-        //        //calculate weapon damage (crit chance x damage)
-        //        if (_random.Next(0, 11) <= weaponStats.GetWeaponCritChance())
-        //        {
-        //            //add to total damage (base damage + weapon damage loop)
-        //            _tmpTotalDamage += (weaponStats.GetWeaponDamage() * 2);
-        //        }
-        //        else
-        //        {
-        //            //add to total damage (base damage + weapon damage loop)
-        //            _tmpTotalDamage += weaponStats.GetWeaponDamage();
-        //        }
-        //    }
-        //    if (dodgeActive)
-        //    {
-        //        _tmpTotalDamage /= 2;
-        //    }
-        //    //remove damage from currentHP
-        //    TakeDamage(_tmpTotalDamage);
-        //}
 
         public bool IsDead()
         {
@@ -150,49 +110,5 @@ namespace No_Consolation
             }
         }
 
-        //public void PlayerAttack(Player player, Enemy enemy)
-        //{
-        //    if (enemy.enemyCombatParameters.HitOrMiss())
-        //    {
-        //        enemy.enemyCombatParameters.TakeDamage(player.playerWeapon, player.dodgeActive);
-        //        Console.WriteLine($"you {player.playerWeapon.GetWeaponAttackType()} with your {player.playerWeapon.GetWeaponName()} dealing {player.playerCombatParameters.GetTmpTotalDamage()} damage!");
-        //        enemy.EnemyStatsRemaining(enemy);
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("The attack missed!");
-        //    }
-        //}
-
-        //public void EnemyAttacks(Enemy Enemy1, Player player1, bool dodgeActive)
-        //{
-        //    Console.WriteLine($"\n{Enemy1.PrintName()} attacks");
-        //    if (dodgeActive)
-        //    {
-        //        if (player1.playerCombatParameters.HitOrMiss(4))
-        //        {
-        //            Console.WriteLine($"You take {Enemy1.enemyCombatParameters.GetDamage()} Damage");
-        //            player1.playerCombatParameters.TakeDamage(Enemy1.enemyCombatParameters.GetDamage(), player1.PlayerShield);
-        //            Console.WriteLine($"you have {player1.playerCombatParameters.GetCurrentHP()} HP remaining");
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine("\nThe attack missed!");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (player1.playerCombatParameters.HitOrMiss())
-        //        {
-        //            Console.WriteLine($"You take {Enemy1.enemyCombatParameters.GetDamage()} Damage");
-        //            player1.playerCombatParameters.TakeDamage(Enemy1.enemyCombatParameters.GetDamage(), player1.PlayerShield);
-        //            Console.WriteLine($"you have {player1.playerCombatParameters.GetCurrentHP()} HP remaining");
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine("\nThe attack missed!");
-        //        }
-        //    }
-        //}
     }
 }

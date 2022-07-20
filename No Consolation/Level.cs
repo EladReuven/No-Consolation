@@ -17,6 +17,8 @@ namespace No_Consolation
         public MapObject playerObject;
         public MapObject enemyObject;
         public MapObject blockie1, blockie2;
+        public MapObject baseOfTrapObject;
+        public MapObject spikeObject;
         public List<MapObject> mapObjects;
 
 
@@ -42,7 +44,6 @@ namespace No_Consolation
             trapSymbol,
             spikeSymbol,
             shopSymbol
-
         }
 
         public static Dictionary<symbolEnum, char> mapSymbols = new Dictionary<symbolEnum, char>(){
@@ -55,7 +56,7 @@ namespace No_Consolation
         {symbolEnum.treasureSymbol, '$'},
         {symbolEnum.enemySymbol, 'E'},
         {symbolEnum.trapSymbol, 'T'},
-        {symbolEnum.spikeSymbol, '◘'},
+        {symbolEnum.spikeSymbol, '*'},
         {symbolEnum.shopSymbol, '♫' }
 
         };
@@ -72,6 +73,7 @@ namespace No_Consolation
         private char[] _notWalkable = new char[7] { '#', '═', '║', '╗', '╝', '╔', '╚' };
 
         private bool _onExit = false;
+        public int numOfTraps;
 
 
 
@@ -95,7 +97,7 @@ namespace No_Consolation
             ExitPos();
             TreasurePos();
             EnemyPos();
-
+            TrapPos();
         }
 
         //check if space in room is available to have something new placed there
@@ -105,7 +107,6 @@ namespace No_Consolation
             {
                 return false;
             }
-
             if (_grid[x, y] == mapSymbols[(symbolEnum.openSpace)])
             {
                 return true;
@@ -210,7 +211,7 @@ namespace No_Consolation
                 ExitY = rnd.Next(1, _rowsY - 1);
                 if (IsAvailable(_colsX - 2, ExitY))
                 {
-                    exitObject = new MapObject(this, "Exit", _colsX - 2, ExitY, mapSymbols[(symbolEnum.exitSymbol)]);
+                    exitObject = new MapObject(this, "Exit", _colsX - 2, ExitY, mapSymbols[symbolEnum.exitSymbol]);
                     mapObjects.Add(exitObject);
                     _grid[exitObject.x, exitObject.y] = exitObject._symbol;
                     break;
@@ -268,6 +269,39 @@ namespace No_Consolation
                 }
             }
         }
+
+        public void TrapPos()
+        {
+            int randomX, randomY;
+            int eSpace = 0;
+            int trapNumName = 1;
+            
+            foreach(char c in _grid)
+            {
+                if(c == mapSymbols[symbolEnum.openSpace])
+                {
+                    eSpace++;
+                }
+            }
+            numOfTraps = (int)(eSpace * 0.05f);
+            for(int i = 0; i < numOfTraps; i++)
+            {
+                while(true)
+                {
+                    randomX = rnd.Next(1, _colsX - 2);
+                    randomY = rnd.Next(1, _rowsY - 1);
+                    if (IsAvailable(randomX, randomY))
+                    {
+                        baseOfTrapObject = new MapObject(this, "Trap Base " + trapNumName, randomX, randomY, mapSymbols[symbolEnum.trapSymbol]);
+                        mapObjects.Add(baseOfTrapObject);
+                        //_grid[baseOfTrapObject.x, baseOfTrapObject.y] = baseOfTrapObject._symbol;
+                        trapNumName++;
+                        break;
+                    }
+                }
+            }
+        }
+
 
         //set random enemy position
         //public void EnemyPosition()
@@ -396,7 +430,7 @@ namespace No_Consolation
             //insert objects symbols to grid
             _grid[entranceObject.x, entranceObject.y] = entranceObject._symbol;
             _grid[exitObject.x, exitObject.y] = exitObject._symbol;
-            _grid[treasureObject.x, treasureObject.y] = treasureObject._symbol;
+            //_grid[treasureObject.x, treasureObject.y] = treasureObject._symbol;
             PlayerPos();
 
             //draw stats
@@ -414,9 +448,16 @@ namespace No_Consolation
                     {
                         Console.Write($"{_grid[x, y]}{mapSymbols[(symbolEnum.horizontal)]}");
                     }
-                    else if ((x < blockie1.bottomRightX && x >= blockie1.topLeftX && (y == blockie1.bottomRightY || y == blockie1.topLeftY)) || (x < blockie2.bottomRightX && x >= blockie2.topLeftX && (y == blockie2.bottomRightY || y == blockie2.topLeftY)))
+                    else if ((x < blockie1.bottomRightX && x >= blockie1.topLeftX && (y == blockie1.bottomRightY || y == blockie1.topLeftY))
+                        || (x < blockie2.bottomRightX && x >= blockie2.topLeftX && (y == blockie2.bottomRightY || y == blockie2.topLeftY)))
                     {
                         Console.Write($"{_grid[x, y]}{mapSymbols[(symbolEnum.horizontal)]}");
+                    }
+                    else if (x == player.GetX() && y == player.GetY())
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        Console.Write(_grid[x, y] + " ");
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                     //objects
                     else
@@ -439,6 +480,11 @@ namespace No_Consolation
             return _colsX;
         }
 
+        public void SetGrid(int x, int y, MapObject obj)
+        {
+            this._grid[x, y] = obj._symbol;
+        }
+
         public char CharAtGridPos(int x, int y)
         {
             return _grid[x, y];
@@ -449,6 +495,11 @@ namespace No_Consolation
             _grid[mapObject.x, mapObject.y] = Level.mapSymbols[(symbolEnum.openSpace)];
         }
 
+        //removes object from mapObjects list
+        public void RemoveMapObject(MapObject obj)
+        {
+            mapObjects.Remove(obj);
+        }
 
     }
 }

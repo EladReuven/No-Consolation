@@ -48,6 +48,11 @@ namespace No_Consolation
                         LogHandler.Add($"Encountered {enemy1.PrintName()} enemy");
                         UtilityMethods.shouldClear = true;
                     }
+                    if(interactions.OnObject())
+                    {
+                        interactions.InteractOnObject();
+                        Render();
+                    }
                     
                     //else if(interactions.OnObject(Level.mapSymbols[(int)Level.symbolEnum.treasureSymbol]))
                     //{
@@ -73,7 +78,9 @@ namespace No_Consolation
         private void Render()
         {
             newLevel.Draw();
-            Console.SetCursorPosition(0, newLevel.GetRows() + 5);
+            Console.SetCursorPosition(0, newLevel.GetRows() + 6);
+            UtilityMethods.ClearBlock(50, 15);
+            Console.SetCursorPosition(0, newLevel.GetRows() + 6);
             LogHandler.PrintLog();
             Console.SetCursorPosition(0, 0);
         }

@@ -23,5 +23,17 @@ namespace No_Consolation
         {
             Console.Write("                                                                                                    ");
         }
+
+        public static void ClearBlock(int x, int y)
+        {
+            for(int i = 0; i < y; i++)
+            {
+                for(int j = 0; j < x; j++)
+                {
+                    Console.Write(" ");
+                }
+                Console.WriteLine();
+            }
+        }
     }
 }

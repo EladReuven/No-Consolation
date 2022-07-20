@@ -56,6 +56,10 @@ namespace No_Consolation
         {
             return playerSymbol;
         }
+        public string GetName()
+        {
+            return _name;
+        }
 
         public void DrawPlayerStats(Player player)
         {
@@ -71,6 +75,11 @@ namespace No_Consolation
                 Console.Write("-");
             }
             Console.WriteLine();
+        }
+
+        public void PlayerStatsRemaining()
+        {
+            Console.WriteLine($"{_name} has {playerCP.GetCurrentHP()} HP remaining.");
         }
 
     }
