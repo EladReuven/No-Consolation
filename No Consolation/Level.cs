@@ -294,7 +294,7 @@ namespace No_Consolation
                     {
                         baseOfTrapObject = new MapObject(this, "Trap Base " + trapNumName, randomX, randomY, mapSymbols[symbolEnum.trapSymbol]);
                         mapObjects.Add(baseOfTrapObject);
-                        _grid[baseOfTrapObject.x, baseOfTrapObject.y] = baseOfTrapObject._symbol;
+                        //_grid[baseOfTrapObject.x, baseOfTrapObject.y] = baseOfTrapObject._symbol;
                         trapNumName++;
                         break;
                     }

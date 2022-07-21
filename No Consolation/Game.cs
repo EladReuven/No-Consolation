@@ -45,7 +45,11 @@ namespace No_Consolation
                         //combat loop
                         player._inCombat = true;
                         interactions.Combat(enemy1);
-                        LogHandler.Add($"Encountered {enemy1.PrintName()} enemy");
+                        if(Items.strBuff > 0)
+                        {
+                            Items.strBuff--;
+                            LogHandler.Add($"{Items.strBuff} Strength-buffed Combat remaining");
+                        }
                         UtilityMethods.shouldClear = true;
                     }
                     if(interactions.OnObject())
@@ -81,7 +85,7 @@ namespace No_Consolation
             Console.SetCursorPosition(0, newLevel.GetRows() + 6);
             UtilityMethods.ClearBlock(50, 15);
             Console.SetCursorPosition(0, newLevel.GetRows() + 6);
-            LogHandler.PrintLog();
+            LogHandler.PrintShortLog();
             Console.SetCursorPosition(0, 0);
         }
 

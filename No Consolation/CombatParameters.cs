@@ -11,6 +11,7 @@ namespace No_Consolation
     {
         public const char _hpSymbol = '♥';
         public int _startingHP, _maxHP, _currentHP, _damage, _dodgeChance;
+        public int shield;
 
         private static int _tmpTotalDamage = 1;
 
@@ -25,6 +26,7 @@ namespace No_Consolation
             if (damage <= 0)
                 damage = 1;
 
+            this.shield = 0;
             this._dodgeChance = dodgeChance; // out of 10
             this._maxHP = maxHP;
             this._startingHP = _maxHP;
@@ -45,11 +47,21 @@ namespace No_Consolation
 
         public void TakeDamage(int damage)
         {
-            if (damage >= _currentHP)
+            if(shield >= damage)
             {
-                _currentHP = 0;
+                shield -= damage;
             }
-            else _currentHP -= damage;
+            else if (shield < damage)
+            {
+                damage -= shield;
+                shield = 0;
+
+                if (damage >= _currentHP)
+                {
+                    _currentHP = 0;
+                }
+                else _currentHP -= damage;
+            }
         }
 
         public bool IsDead()
@@ -89,7 +101,13 @@ namespace No_Consolation
 
         public void PrintHearts()
         {
-            for(int i = 1; i <= _maxHP; i++)
+            int maxHealthPlusShield = _maxHP;
+            if (_currentHP + shield > _maxHP)
+            {
+                maxHealthPlusShield = _maxHP + shield;
+            }
+
+            for(int i = 1; i <= maxHealthPlusShield; i++)
             {
                 if(i <= _currentHP)
                 {
@@ -97,13 +115,13 @@ namespace No_Consolation
                     Console.Write(_hpSymbol);
                     Console.ForegroundColor = ConsoleColor.White;
                 }
-                else if (i <= _startingHP)
+                else if (i <= _maxHP)
                 {
                     Console.Write(_hpSymbol);
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.Write(_hpSymbol);
                     Console.ForegroundColor = ConsoleColor.White;
                 }

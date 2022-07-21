@@ -62,6 +62,8 @@ namespace No_Consolation
 
         public void DrawPlayerStats(Player player)
         {
+            UtilityMethods.ClearLine();
+            Console.SetCursorPosition(0, 0);
             Console.Write("HP: ");
             player.playerCP.PrintHearts();
             Console.SetCursorPosition(30, 0);

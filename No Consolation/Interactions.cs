@@ -11,11 +11,13 @@ namespace No_Consolation
         Random rand = new Random();
         Player player;
         Level level;
+        Items items = new Items();
 
         public void ConnectComponents(Player player, Level level)
         {
             this.level = level;
             this.player = player;
+            items.player = player;
         }
 
         public void InteractOnObject()
@@ -31,6 +33,7 @@ namespace No_Consolation
                     {
                         case '$':
                             //treasure interaction dont forget update log
+                            StepOnTreasure(obj);
                             break;
                         case 'T':
                             //spawn 1-3 spikes around player, delete trap obj
@@ -46,6 +49,14 @@ namespace No_Consolation
                 }
             }
             //char c = Level.mapSymbols[Level.symbolEnum.treasureSymbol];
+        }
+
+        private void StepOnTreasure(MapObject treasure)
+        {
+            int randItem = rand.Next(items.treasureItems.Count);
+            items.itemAction(items.treasureItems[randItem]);
+            LogHandler.Add($"Opned a treasure chest and found a {Items.itemName[items.treasureItems[randItem]]}");
+            level.RemoveMapObject(treasure);
         }
 
         public bool InRangeOfObject(char symbol)
@@ -99,6 +110,7 @@ namespace No_Consolation
                         level.RemoveObjectSymbol(level.enemyObject);
                         player.coin += 5;
                         player._inCombat = false;
+                        LogHandler.Add($"You defeated the {enemy.PrintName()}! Gain 5 Coins");
                         break;
                     }
                     if(!player._inCombat)
@@ -126,12 +138,21 @@ namespace No_Consolation
             {
                 //attack, check if hit, damage enemy
                 case 1:
-                    Console.WriteLine($"{player.GetName()} attacks for {player.playerCP.GetDamage()} damage");
                     if (enemy.enemyCombatParameters.IsAttackHit())
                     {
                         //Console.WriteLine("enemy dc: " + enemy.enemyCombatParameters._dodgeChance + " player dc:" + player.playerCP._dodgeChance);
-                        Console.WriteLine("Attack hits!");
-                        enemy.enemyCombatParameters.TakeDamage(player.playerCP.GetDamage());
+                        if(Items.strBuff > 0)
+                        {
+                            Console.WriteLine($"{player.GetName()} attacks for {player.playerCP.GetDamage() + 2} damage");
+                            enemy.enemyCombatParameters.TakeDamage(player.playerCP.GetDamage() + 2);
+                            Console.WriteLine("Attack hits!");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{player.GetName()} attacks for {player.playerCP.GetDamage()} damage");
+                            enemy.enemyCombatParameters.TakeDamage(player.playerCP.GetDamage());
+                            Console.WriteLine("Attack hits!");
+                        }
                     }
                     else
                     {
@@ -145,6 +166,7 @@ namespace No_Consolation
                     {
                         Console.WriteLine($"{player.GetName()} ran away!");
                         level.RemoveObjectSymbol(level.enemyObject);
+                        LogHandler.Add($"You ran away from the {enemy.PrintName()}. disgracful.");
                         player._inCombat = false;
                     }
                     else
