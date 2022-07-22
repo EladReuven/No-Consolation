@@ -9,6 +9,7 @@ namespace No_Consolation
     public static class UtilityMethods
     {
         public static bool shouldClear = false;
+        public static bool sadDog = false;
 
         public static void ShouldClear()
         {
@@ -34,6 +35,46 @@ namespace No_Consolation
                 }
                 Console.WriteLine();
             }
+        }
+
+        public static void YouDied()
+        {
+            Console.WriteLine(@"__     ______  _    _     _____ _____ ______ _____  ");
+            Console.WriteLine(@"\ \   / / __ \| |  | |   |  __ \_   _|  ____|  __ \ ");
+            Console.WriteLine(@" \ \_/ / |  | | |  | |   | |  | || | | |__  | |  | |");
+            Console.WriteLine(@"  \   /| |  | | |  | |   | |  | || | |  __| | |  | |");
+            Console.WriteLine(@"   | | | |__| | |__| |   | |__| || |_| |____| |__| |");
+            Console.WriteLine(@"   |_|  \____/ \____/    |_____/_____|______|_____/ ");
+        }
+
+        public static void HappyShopDog()
+        {
+            Console.WriteLine(@"░░░░░░░░░░░░░░░░░░░░");
+            Console.WriteLine(@"░▄▀▄▀▀▀▀▄▀▄░░░░░░░░░");
+            Console.WriteLine(@"░█░░░░░░░░▀▄░░░░░░▄░");
+            Console.WriteLine(@"█░░▀░░▀░░░░░▀▄▄░░█░█");
+            Console.WriteLine(@"█░▄░█▀░▄░░░░░░░▀▀░░█");
+            Console.WriteLine(@"█░░▀▀▀▀░░░░░░░░░░░░█");
+            Console.WriteLine(@"█░░░░░░░░░░░░░░░░░░█");
+            Console.WriteLine(@"█░░░░░░░░░░░░░░░░░░█");
+            Console.WriteLine(@"░█░░▄▄░░▄▄▄▄░░▄▄░░█░");
+            Console.WriteLine(@"░█░▄▀█░▄▀░░█░▄▀█░▄▀░");
+            Console.WriteLine(@"░░▀░░░▀░░░░░▀░░░▀░░░");
+        }
+
+        public static void SadShopDog()
+        {
+            Console.WriteLine(@"░░░░░░░░░░░░░░░░░░░░");
+            Console.WriteLine(@"░▄▀▄▀▀▀▀▄▀▄░░░░░░░░░");
+            Console.WriteLine(@"░█░░░░░░░░▀▄░░░░░░▄░");
+            Console.WriteLine(@"█░░▀░░▀░░░░░▀▄▄░░█░█");
+            Console.WriteLine(@"█░░░█▀░░░░░░░░░▀▀░░█");
+            Console.WriteLine(@"█░▄▀▀▀▀▄░░░░░░░░░░░█");
+            Console.WriteLine(@"█░░░░░░░░░░░░░░░░░░█");
+            Console.WriteLine(@"█░░░░░░░░░░░░░░░░░░█");
+            Console.WriteLine(@"░█░░▄▄░░▄▄▄▄░░▄▄░░█░");
+            Console.WriteLine(@"░█░▄▀█░▄▀░░█░▄▀█░▄▀░");
+            Console.WriteLine(@"░░▀░░░▀░░░░░▀░░░▀░░░");
         }
     }
 }

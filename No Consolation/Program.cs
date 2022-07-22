@@ -9,5 +9,6 @@ public class Program
         game.Play();
         Console.Clear();
         Console.WriteLine("GAME OVER");
+        UtilityMethods.YouDied();
     }
 }

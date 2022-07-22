@@ -60,15 +60,16 @@ namespace No_Consolation
             return _name;
         }
 
-        public void DrawPlayerStats(Player player)
+        public void DrawPlayerStats()
         {
             UtilityMethods.ClearLine();
             Console.SetCursorPosition(0, 0);
             Console.Write("HP: ");
-            player.playerCP.PrintHearts();
-            Console.SetCursorPosition(30, 0);
+            this.playerCP.PrintHearts();
+            Console.WriteLine();
+            //Console.SetCursorPosition(30, 0);
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Coins: " + player.coin);
+            Console.WriteLine("Coins: " + this.coin);
             Console.ForegroundColor = ConsoleColor.White;
             //Console.SetCursorPosition(0,0);
             for (int i = 0; i <= 40; i++)

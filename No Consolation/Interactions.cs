@@ -9,15 +9,24 @@ namespace No_Consolation
     internal class Interactions
     {
         Random rand = new Random();
+        Items items = new Items();
         Player player;
         Level level;
-        Items items = new Items();
+        Enemy enemy;
+
+        public bool ranAway = false;
+        string response = "CHOOSE AN ITEM: ";
 
         public void ConnectComponents(Player player, Level level)
         {
             this.level = level;
             this.player = player;
             items.player = player;
+        }
+
+        public void ConnectEnemy(Enemy enemy)
+        {
+            this.enemy = enemy;
         }
 
         public void InteractOnObject()
@@ -46,26 +55,29 @@ namespace No_Consolation
                         default:
                             break;
                     }
+                    if(obj._symbol == Level.mapSymbols[Level.symbolEnum.enemySymbol])
+                    {
+                        Combat(enemy);
+                    }
                 }
             }
-            //char c = Level.mapSymbols[Level.symbolEnum.treasureSymbol];
         }
 
         private void StepOnTreasure(MapObject treasure)
         {
             int randItem = rand.Next(items.treasureItems.Count);
-            items.itemAction(items.treasureItems[randItem]);
             LogHandler.Add($"Opned a treasure chest and found a {Items.itemName[items.treasureItems[randItem]]}");
+            items.itemAction(items.treasureItems[randItem]);
             level.RemoveMapObject(treasure);
         }
 
-        public bool InRangeOfObject(char symbol)
+        public bool InRangeOfObject(MapObject obj)
         {
             for(int j = player.GetY() - 1; j <= player.GetY() + 1; j++)
             {
                 for(int i = player.GetX() - 1; i <= player.GetX() + 1; i++)
                 {
-                    if (level.CharAtGridPos(i, j) == symbol)
+                    if (obj.x == i && obj.y == j)
                     {
                         return true;
                     }
@@ -88,11 +100,11 @@ namespace No_Consolation
 
         public void Combat(Enemy enemy)
         {
+            ranAway = false;
             int choice;
             Console.SetCursorPosition(0, level.GetRows() + 1);
             while(player._inCombat)
             {
-                // i dunno how im gonna do this but maybe combat here?
                 enemy.EnemyEncounter();
                 Console.WriteLine("Press Enter to continue");
                 Console.ReadLine();
@@ -106,11 +118,15 @@ namespace No_Consolation
                     PlayerOptions(enemy);
                     if (enemy.enemyCombatParameters.IsDead())
                     {
-                        enemy.EnemyDeadText();
                         level.RemoveObjectSymbol(level.enemyObject);
-                        player.coin += 5;
+                        level.RemoveMapObject(level.enemyObject);
+                        if(!ranAway)
+                        {
+                            enemy.EnemyDeadText();
+                            player.coin += 5;
+                            LogHandler.Add($"You defeated the {enemy.PrintName()}! Gain 5 Coins");
+                        }
                         player._inCombat = false;
-                        LogHandler.Add($"You defeated the {enemy.PrintName()}! Gain 5 Coins");
                         break;
                     }
                     if(!player._inCombat)
@@ -120,7 +136,7 @@ namespace No_Consolation
                     EnemyAttakcs(enemy);
                     if (player.playerCP.IsDead())
                     {
-                        Console.WriteLine("You died");
+                        Console.WriteLine("You Died"); ;
                         player._inCombat = false;
                         break;
                     }
@@ -132,48 +148,62 @@ namespace No_Consolation
 
         public void PlayerOptions(Enemy enemy)
         {
-            Console.WriteLine($"Choose an option: \n1. Attack for {player.playerCP.GetDamage()} damage\n2. Run (50% chance of success)");
-            int choice = int.Parse(Console.ReadLine());
-            switch (choice)
+            bool loopBool = true;
+            Console.WriteLine($"Choose an option: \n1. Attack for {player.playerCP.GetDamage() + Items.strBuffDmg} damage\n2. Run (50% chance of success)");
+            while (loopBool)
             {
-                //attack, check if hit, damage enemy
-                case 1:
-                    if (enemy.enemyCombatParameters.IsAttackHit())
-                    {
-                        //Console.WriteLine("enemy dc: " + enemy.enemyCombatParameters._dodgeChance + " player dc:" + player.playerCP._dodgeChance);
-                        if(Items.strBuff > 0)
+                string choice = Console.ReadLine();
+                switch (choice)
+                {
+                    //attack, check if hit, damage enemy
+                    case "1":
+                        if (enemy.enemyCombatParameters.IsAttackHit())
                         {
-                            Console.WriteLine($"{player.GetName()} attacks for {player.playerCP.GetDamage() + 2} damage");
-                            enemy.enemyCombatParameters.TakeDamage(player.playerCP.GetDamage() + 2);
-                            Console.WriteLine("Attack hits!");
+                            if(Items.strBuffAmount > 0)
+                            {
+                                Console.WriteLine($"{player.GetName()} attacks for {player.playerCP.GetDamage() + Items.strBuffDmg} damage");
+                                enemy.enemyCombatParameters.TakeDamage(player.playerCP.GetDamage() + Items.strBuffDmg);
+                                Console.WriteLine("Attack hits!");
+                                loopBool = false;
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{player.GetName()} attacks for {player.playerCP.GetDamage()} damage");
+                                enemy.enemyCombatParameters.TakeDamage(player.playerCP.GetDamage());
+                                Console.WriteLine("Attack hits!");
+                                loopBool = false;
+                            }
                         }
                         else
                         {
-                            Console.WriteLine($"{player.GetName()} attacks for {player.playerCP.GetDamage()} damage");
-                            enemy.enemyCombatParameters.TakeDamage(player.playerCP.GetDamage());
-                            Console.WriteLine("Attack hits!");
+                            Console.WriteLine("Attack missed!");
+                                loopBool = false;
                         }
-                    }
-                    else
-                    {
-                        //Console.WriteLine("enemy dc: " + enemy.enemyCombatParameters._dodgeChance + " player dc:" + player.playerCP._dodgeChance);
-                        Console.WriteLine("Attack missed!");
-                    }
-                    break;
-                //try run
-                case 2:
-                    if (player.playerCP.Run())
-                    {
-                        Console.WriteLine($"{player.GetName()} ran away!");
-                        level.RemoveObjectSymbol(level.enemyObject);
-                        LogHandler.Add($"You ran away from the {enemy.PrintName()}. disgracful.");
-                        player._inCombat = false;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{player.GetName()} tripped and could'nt run away!");
-                    }
-                    break;
+                        break;
+                    //try run
+                    case "2":
+                        if (player.playerCP.Run())
+                        {
+                            Console.WriteLine($"{player.GetName()} ran away!");
+                            //level.RemoveObjectSymbol(level.enemyObject);
+                            level.RemoveMapObject(level.enemyObject);
+                            LogHandler.Add($"You ran away from the {enemy.PrintName()}. disgracful.");
+                            player._inCombat = false;
+                            loopBool = false;
+                            enemy.enemyCombatParameters._currentHP = 0;
+                            ranAway = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{player.GetName()} tripped and couldn't run away!");
+                            loopBool = false;
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("Enter a valid choice");
+
+                        break;
+                }
             }
         }
 
@@ -193,10 +223,6 @@ namespace No_Consolation
 
         private void ActivateTrap(MapObject trap)
         {
-            //debugging
-            //Console.WriteLine($"trap x: {trap.x} trap y: {trap.y}");
-
-            //level.SetGrid(trap.x, trap.y, trap);
 
             //pick between 2-3 traps
             int surroundingTraps = rand.Next(1, 4);
@@ -244,8 +270,133 @@ namespace No_Consolation
             player.playerCP.TakeDamage(1);
             level.RemoveMapObject(spike);
             LogHandler.Add("Stepped on a spike and took 1 damage! Ouch!");
+        }
+
+        public void Shop()
+        {
+            bool inShop = true;
+            string userinput;
+            Level.ShopCounter += rand.Next(2, 5);
+            while (inShop)
+            {
+                Console.Clear();
+                player.DrawPlayerStats();
+                Console.WriteLine("HELLO I AM TEPPIE THE SHOPKEEPER WHAT WOOF YOU LIKE TO BUY?");
+                if (UtilityMethods.sadDog)
+                {
+                    UtilityMethods.SadShopDog();
+                    UtilityMethods.sadDog = false;
+                }
+                else
+                {
+                    UtilityMethods.HappyShopDog();
+                }
+                Console.WriteLine(response);
+                Console.WriteLine("-------------------------------------");
+                PrintShop();
+                //reads user choice
+                userinput = Console.ReadLine();
+
+                //switch with user choice
+                switch (userinput)
+                {
+                    case "1":
+                        ShopChoice(userinput);
+                        break;
+                    case "2":
+                        ShopChoice(userinput);
+                        break;
+                    case "3":
+                        ShopChoice(userinput);
+
+                        break;
+                    case "4":
+                        ShopChoice(userinput);
+
+                        break;
+                    case "5":
+                        ShopChoice(userinput);
+
+                        break;
+                    case "6":
+                        ShopChoice(userinput);
+
+                        break;
+                    case "7":
+                        ShopChoice(userinput);
+
+                        break;
+                    case "8":
+                        //sad dog
+                        UtilityMethods.sadDog = true;
+                        break;
+                    case "0":
+                        inShop = false;
+                        break;
+                    default:
+                        break;
+                }
+
+                //check if player has enough coins for item
+                //if yes, buy and activate item
+                //if no write not enough money
+                //if chose nothing then sad dog
+            }
 
         }
 
+        private void PrintShop()
+        {
+            int count = 0;
+            foreach (Items.itemEnum i in items.shopItems)
+            {
+                count++;
+                if (count == 6)
+                {
+                    Console.Write("6. Health Regen! ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"PRICE: {Items.itemPrice[Items.itemEnum.regenHP]}");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"DESC: {Items.itemDescription[Items.itemEnum.regenHP]}");
+                    Console.WriteLine();
+                }
+                else if (count == 7)
+                {
+                    Console.Write("7. Shield Regen! ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"PRICE: {Items.itemPrice[Items.itemEnum.regenShield]}");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"DESC: {Items.itemDescription[Items.itemEnum.regenShield]}");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.Write($"{count}. {Items.itemName[items.shopItems[count - 1]]}! ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"PRICE: {Items.itemPrice[items.shopItems[count - 1]]}");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"DESC: {Items.itemDescription[items.shopItems[count - 1]]}");
+                    Console.WriteLine();
+                }
+            }
+            Console.WriteLine("8. NOTHING");
+            Console.WriteLine();
+            Console.WriteLine("0. Exit");
+        }
+
+        private void ShopChoice(string userinput)
+        {
+            if (player.coin < Items.itemPrice[items.shopItems[int.Parse(userinput) - 1]])
+            {
+                response = $"YOU DONT HAVE ENOUGH COIN FOR A {Items.itemName[items.shopItems[int.Parse(userinput) - 1]].ToUpper()}";
+                //Console.WriteLine($"You dont have enough Coin for a {Items.itemName[items.shopItems[int.Parse(userinput) - 1]]}");
+            }
+            else
+            {
+                player.coin -= Items.itemPrice[items.shopItems[int.Parse(userinput) - 1]];
+                items.itemAction(items.shopItems[int.Parse(userinput) - 1]);
+                response = "THANK YOU";
+            }
+        }
     }
 }

@@ -101,11 +101,11 @@ namespace No_Consolation
 
         public void PrintHearts()
         {
-            int maxHealthPlusShield = _maxHP;
-            if (_currentHP + shield > _maxHP)
-            {
-                maxHealthPlusShield = _maxHP + shield;
-            }
+            int maxHealthPlusShield = _maxHP + shield;
+            //if (_currentHP + shield > _maxHP)
+            //{
+            //    maxHealthPlusShield = _maxHP + shield;
+            //}
 
             for(int i = 1; i <= maxHealthPlusShield; i++)
             {

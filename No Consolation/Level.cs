@@ -29,7 +29,9 @@ namespace No_Consolation
         private char[,] _grid;
         private int _colsX, _rowsY;
 
+        public static int ShopCounter = 4;
         public static int difficulty = 5;
+
 
         public enum symbolEnum
         {
@@ -55,7 +57,7 @@ namespace No_Consolation
             {symbolEnum.entranceSymbol, 'O'},
             {symbolEnum.exitSymbol, 'X'},
             {symbolEnum.treasureSymbol, '$'},
-            {symbolEnum.enemySymbol, 'E'},
+            {symbolEnum.enemySymbol, 'M'},
             {symbolEnum.trapSymbol, 'T'},
             {symbolEnum.spikeSymbol, '*'},
             {symbolEnum.shopSymbol, '♫' }
@@ -85,11 +87,11 @@ namespace No_Consolation
             _colsX = _grid.GetLength(0);
             _rowsY = _grid.GetLength(1);
             mapObjects = new List<MapObject>();
+            
         }
 
         public void InitRoom()
         {
-
             LevelOutline();
             blockie1 = LevelBlock();
             blockie2 = LevelBlock();
@@ -157,9 +159,95 @@ namespace No_Consolation
                     }
                     break;
             }
-
         }
 
+        //Enemy Movement
+        public void EnemyMovement(Player player)
+        {
+            int tmpX = enemyObject.x;
+            int tmpY = enemyObject.y;
+            //This is gross code but the only other way i could think of was using recursion to try and find the fewest moves to player,
+            //but i dunno how to do that... in the amount of time i have
+            if(EnemyFoundPlayer(enemyObject))
+            {
+                //checking diagonal top left
+                if(enemyObject.x > player.GetX() && enemyObject.y > player.GetY())
+                {
+                    if (IsAvailable(enemyObject.x - 1, enemyObject.y - 1))
+                    {
+                        enemyObject.x -= 1;
+                        enemyObject.y -= 1;
+                    }
+                }
+                //checking diagonal bottom left
+                else if (enemyObject.x > player.GetX() && enemyObject.y < player.GetY())
+                {
+                    if (IsAvailable(enemyObject.x - 1, enemyObject.y + 1))
+                    {
+                        enemyObject.x -= 1;
+                        enemyObject.y += 1;
+                    }
+                }
+                //checking diagonal top right
+                else if (enemyObject.x < player.GetX() && enemyObject.y < player.GetY())
+                {
+                    if (IsAvailable(enemyObject.x + 1, enemyObject.y + 1))
+                    {
+                        enemyObject.x += 1;
+                        enemyObject.y += 1;
+                    }
+                }
+                //checking diagonal bottom right
+                else if (enemyObject.x < player.GetX() && enemyObject.y > player.GetY())
+                {
+                    if (IsAvailable(enemyObject.x + 1, enemyObject.y - 1))
+                    {
+                        enemyObject.x += 1;
+                        enemyObject.y -= 1;
+                    }
+                }
+                //checking only X movement
+                else if (enemyObject.x > player.GetX())
+                {
+                    if (IsAvailable(enemyObject.x - 1, enemyObject.y))
+                        enemyObject.x -= 1;
+                }
+                else if(enemyObject.x < player.GetX())
+                {
+                    if (IsAvailable(enemyObject.x + 1, enemyObject.y))
+                        enemyObject.x += 1;
+                }
+                //checking only Y movement
+                else if(enemyObject.y > player.GetY())
+                {
+                    if(IsAvailable(enemyObject.x, enemyObject.y - 1))
+                        enemyObject.y -= 1;
+                }
+                else if(enemyObject.y < player.GetY())
+                {
+                    if (IsAvailable(enemyObject.x, enemyObject.y + 1))
+                        enemyObject.y += 1;
+                }
+                _grid[tmpX, tmpY] = mapSymbols[symbolEnum.openSpace];
+                _grid[enemyObject.x, enemyObject.y] = enemyObject._symbol;
+            }
+        }
+
+        //check if player is in a square around the enemy
+        public bool EnemyFoundPlayer(MapObject enemy)
+        {
+            for(int i = 0; i < 7;i++)
+            {
+                for(int j = 0; j < 7; j++)
+                {
+                    if(enemy.x - 3 + j == player.GetX() && enemy.y - 3 + i == player.GetY())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         //walkable for player
         public bool IsWalkable(int x, int y)
@@ -283,8 +371,17 @@ namespace No_Consolation
                     eSpace++;
                 }
             }
-            numOfTraps = (int)(eSpace * 0.05f);
-            for(int i = 0; i < numOfTraps; i++)
+            if(Items.cursedCoinActive)
+            {
+                numOfTraps = (int)(eSpace * 0.125f);
+                Items.cursedCoinActive = false;
+            }
+            else
+            {
+                numOfTraps = (int)(eSpace * 0.05f);
+            }
+
+            for (int i = 0; i < numOfTraps; i++)
             {
                 while(true)
                 {
@@ -434,7 +531,7 @@ namespace No_Consolation
             PlayerPos();
 
             //draw stats
-            player.DrawPlayerStats(player);
+            player.DrawPlayerStats();
 
             //draw map
             for (int y = 0; y < _rowsY; y++)

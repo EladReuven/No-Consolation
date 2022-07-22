@@ -8,36 +8,29 @@ namespace No_Consolation
 {
     internal class Items
     {
-        //items to be the name of the item, and amout of items
-
-        //str potion = str buff active (+2 dmg for next 2 enemies) NEED TEST
-
-        //raise max hp item
-
-        //raise max dmg
-
-        //regenerating shield buff (+1 shield every new room)
-
-        //regen hp buff active (+1 hp back every new room)
 
         public Player player;
         Random random = new Random();
 
         //strength buff combat counter, + every str potion, - every end of combat 
-        public static int strBuff = 0;
+        public static int strBuffAmount = 0;
+        public static int strBuffDmg = 0;
+        public static int healthRegenAmount = 0;
+        public static int shieldRegenAmount = 0;
+
+        public static bool cursedCoinActive = false;
 
         public Items()
         {
             shopItems = new List<itemEnum>
                 {
-                    itemEnum.bagOfCoins,
                     itemEnum.heal,
                     itemEnum.shield,
                     itemEnum.str,
                     itemEnum.maxHp,
                     itemEnum.maxDmg,
-                    itemEnum.regenShield,
-                    itemEnum.regenHP
+                    itemEnum.regenHP,
+                    itemEnum.regenShield
                 };
             treasureItems = new List<itemEnum>
                 {
@@ -58,8 +51,8 @@ namespace No_Consolation
             str,
             maxHp,
             maxDmg,
-            regenShield,
             regenHP,
+            regenShield,
             cursedCoins
         }
 
@@ -96,7 +89,7 @@ namespace No_Consolation
             {itemEnum.heal, "Heal 3 HP" },
             {itemEnum.shield, "Gain a 3 damage Shield" },
             {itemEnum.str, "Raise strength by 2 for the next 2 combats" },
-            {itemEnum.maxHp, "Permenantly increase max HP by 2" },
+            {itemEnum.maxHp, "Permenantly increase max HP by 1" },
             {itemEnum.maxDmg, "Permenantly increase your Damage by 1" },
             {itemEnum.regenHP, "Increase shield by 1 every new room for the rest of the game" },
             {itemEnum.regenShield, "Regenerate 1 HP every new room for the rest of the game" },
@@ -120,7 +113,29 @@ namespace No_Consolation
                 case itemEnum.shield:
                     Shield();
                     break;
+                case itemEnum.cursedCoins:
+                    CursedCoins();
+                    break;
+                case itemEnum.maxHp:
+                    player.playerCP._maxHP++;
+                    break;
+                case itemEnum.maxDmg:
+                    player.playerCP._damage++;
+                    break;
+                case itemEnum.regenHP:
+                    healthRegenAmount++;
+                    break;
+                case itemEnum.regenShield:
+                    shieldRegenAmount++;
+                    break;
             }
+        }
+
+        private void CursedCoins()
+        {
+            player.coin += 10;
+            cursedCoinActive = true;
+            LogHandler.Add("Gained 10 coins, but at what cost?");
         }
 
         private void Shield()
@@ -131,7 +146,8 @@ namespace No_Consolation
 
         private static void StrengthBuff()
         {
-            strBuff += 2;
+            strBuffAmount += 2;
+            strBuffDmg += 2;
             LogHandler.Add("Drank a Strength Potion! Buffed for the next 2 combats!");
         }
 
@@ -151,9 +167,10 @@ namespace No_Consolation
             }
             else if (player.playerCP._currentHP + 3 >= player.playerCP._maxHP)
             {
-                player.playerCP._currentHP = player.playerCP._maxHP;
                 LogHandler.Add($"Drank a healing potion! Restored {player.playerCP._maxHP - player.playerCP._currentHP} HP. You are now max HP!");
+                player.playerCP._currentHP = player.playerCP._maxHP;
             }
         }
+
     }
 }
