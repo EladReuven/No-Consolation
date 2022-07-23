@@ -8,8 +8,8 @@ namespace No_Consolation
 {
     public class EnemyGenerator
     {
-        private string[] _nameList = new string[] { "Dor", "Goblin", "Dragon", "Troll", "Beast" };
-        private string[] _desc = new string[] { "Humble", "Mighty", "Awful", "Average", "Foul" };
+        private string[] _nameList = new string[] { "Amit", "Other-Amit", "Avi", "Daniel", "Dor", "Eitan", "Saher", "Yarin", "Ziv"};
+        private string[] _desc = new string[] {"Mighty", "Awful", "Average", "Foul", "Colossal", "Droopy", "Handsome", "Disgusting", "Ghostly"};
 
         private int _enemiesMade = 0;
 

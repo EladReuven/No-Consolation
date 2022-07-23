@@ -12,7 +12,7 @@ namespace No_Consolation
         public CombatParameters playerCP;
 
         //grid stats
-        public const char playerSymbol = '☻';
+        public static char playerSymbol = '☻';
         public const char pHealthSymbol = '♥';
 
         private int _playerX;

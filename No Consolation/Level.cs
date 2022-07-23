@@ -30,8 +30,8 @@ namespace No_Consolation
         private int _colsX, _rowsY;
 
         public static int ShopCounter = 4;
-        public static int difficulty = 5;
-
+        public static int startingDifficulty = 5;
+        public static int progressionDifficulty = 1;
 
         public enum symbolEnum
         {
@@ -57,20 +57,11 @@ namespace No_Consolation
             {symbolEnum.entranceSymbol, 'O'},
             {symbolEnum.exitSymbol, 'X'},
             {symbolEnum.treasureSymbol, '$'},
-            {symbolEnum.enemySymbol, 'M'},
+            {symbolEnum.enemySymbol, 'E'},
             {symbolEnum.trapSymbol, 'T'},
-            {symbolEnum.spikeSymbol, '*'},
-            {symbolEnum.shopSymbol, '♫' }
+            {symbolEnum.spikeSymbol, '*'}
         };
 
-        //private char _openSpace = ' ';
-        //private char _blockedSpace = '#'; //█
-        //private char _horizontal = '═';
-        //private char _vertical = '║';
-        //private char _entranceSymbol = 'E';
-        //private char _exitSymbol = 'X';
-        //private char _treasureSymbol = '$';
-        //private char _enemySymbol = 'O';
 
         private char[] _notWalkable = new char[7] { '#', '═', '║', '╗', '╝', '╔', '╚' };
 
@@ -120,44 +111,59 @@ namespace No_Consolation
         }
 
 
-        //switch for moving player with arrows
-        public void PlayerMovement()
+        //switch for moving player with arrows or opening menu
+        public void UserActions()
         {
-            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-            ConsoleKey key = keyInfo.Key;
-            switch (key)
+            bool moved = false;
+            while(!moved)
             {
-                case ConsoleKey.UpArrow:
-                    if (IsWalkable(player.GetX(), player.GetY() - 1))
-                    {
-                        _grid[player.GetX(), player.GetY()] = mapSymbols[symbolEnum.openSpace];
-                        player.SetCoordinates(player.GetX(), player.GetY() - 1);
-                    }
-                    break;
+                Draw();
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                ConsoleKey key = keyInfo.Key;
+                switch (key)
+                {
+                    case ConsoleKey.UpArrow:
+                        if (IsWalkable(player.GetX(), player.GetY() - 1))
+                        {
+                            _grid[player.GetX(), player.GetY()] = mapSymbols[symbolEnum.openSpace];
+                            player.SetCoordinates(player.GetX(), player.GetY() - 1);
+                            moved = true;
+                        }
+                        break;
 
-                case ConsoleKey.DownArrow:
-                    if (IsWalkable(player.GetX(), player.GetY() + 1))
-                    {
-                        _grid[player.GetX(), player.GetY()] = mapSymbols[symbolEnum.openSpace];
-                        player.SetCoordinates(player.GetX(), player.GetY() + 1);
-                    }
-                    break;
+                    case ConsoleKey.DownArrow:
+                        if (IsWalkable(player.GetX(), player.GetY() + 1))
+                        {
+                            _grid[player.GetX(), player.GetY()] = mapSymbols[symbolEnum.openSpace];
+                            player.SetCoordinates(player.GetX(), player.GetY() + 1);
+                            moved = true;
+                        }
+                        break;
 
-                case ConsoleKey.RightArrow:
-                    if (IsWalkable(player.GetX() + 1, player.GetY()))
-                    {
-                        _grid[player.GetX(), player.GetY()] = mapSymbols[symbolEnum.openSpace];
-                        player.SetCoordinates(player.GetX() + 1, player.GetY());
-                    }
-                    break;
+                    case ConsoleKey.RightArrow:
+                        if (IsWalkable(player.GetX() + 1, player.GetY()))
+                        {
+                            _grid[player.GetX(), player.GetY()] = mapSymbols[symbolEnum.openSpace];
+                            player.SetCoordinates(player.GetX() + 1, player.GetY());
+                            moved = true;
+                        }
+                        break;
 
-                case ConsoleKey.LeftArrow:
-                    if (IsWalkable(player.GetX() - 1, player.GetY()))
-                    {
-                        _grid[player.GetX(), player.GetY()] = mapSymbols[symbolEnum.openSpace];
-                        player.SetCoordinates(player.GetX() - 1, player.GetY());
-                    }
-                    break;
+                    case ConsoleKey.LeftArrow:
+                        if (IsWalkable(player.GetX() - 1, player.GetY()))
+                        {
+                            _grid[player.GetX(), player.GetY()] = mapSymbols[symbolEnum.openSpace];
+                            player.SetCoordinates(player.GetX() - 1, player.GetY());
+                            moved = true;
+                        }
+                        break;
+                    case ConsoleKey.Escape:
+                        Menu.GameMenu();
+                        break;
+                    default:
+                        Console.Clear();
+                        break;
+                }
             }
         }
 
@@ -550,13 +556,19 @@ namespace No_Consolation
                     {
                         Console.Write($"{_grid[x, y]}{mapSymbols[(symbolEnum.horizontal)]}");
                     }
+                    //objects
                     else if (x == player.GetX() && y == player.GetY())
                     {
-                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        Console.ForegroundColor = Menu.playerColor;
                         Console.Write(_grid[x, y] + " ");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
-                    //objects
+                    else if (x == enemyObject.x && y == enemyObject.y)
+                    {
+                        Console.ForegroundColor = Menu.enemyColor;
+                        Console.Write(_grid[x, y] + " ");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
                     else
                     {
                         Console.Write(_grid[x, y] + " ");
