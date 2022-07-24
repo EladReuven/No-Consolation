@@ -69,6 +69,7 @@ namespace No_Consolation
             LogHandler.Add($"Opned a treasure chest and found a {Items.itemName[items.treasureItems[randItem]]}");
             items.itemAction(items.treasureItems[randItem]);
             level.RemoveMapObject(treasure);
+            BeepMusic.CoinPickUp();
         }
 
         public bool InRangeOfObject(MapObject obj)
@@ -138,6 +139,7 @@ namespace No_Consolation
                     {
                         Console.WriteLine("You Died"); ;
                         player._inCombat = false;
+                        Console.ReadLine();
                         break;
                     }
                 }
@@ -237,24 +239,28 @@ namespace No_Consolation
                     level.spikeObject = new MapObject(level, "spike" + spikeCount + trap._name, trap.x + 1, trap.y, Level.mapSymbols[Level.symbolEnum.spikeSymbol]);
                     level.SetGrid(level.spikeObject.x, level.spikeObject.y, level.spikeObject);
                     level.mapObjects.Add(level.spikeObject);
+                    continue;
                 }
                 else if (level.IsAvailable(trap.x, trap.y + 1))
                 {
                     level.spikeObject = new MapObject(level, "spike" + spikeCount + trap._name, trap.x, trap.y + 1, Level.mapSymbols[Level.symbolEnum.spikeSymbol]);
                     level.SetGrid(level.spikeObject.x, level.spikeObject.y, level.spikeObject);
                     level.mapObjects.Add(level.spikeObject);
+                    continue;
                 }
                 else if (level.IsAvailable(trap.x, trap.y - 1))
                 {
                     level.spikeObject = new MapObject(level, "spike" + spikeCount + trap._name, trap.x, trap.y - 1, Level.mapSymbols[Level.symbolEnum.spikeSymbol]);
                     level.SetGrid(level.spikeObject.x, level.spikeObject.y, level.spikeObject);
                     level.mapObjects.Add(level.spikeObject);
+                    continue;
                 }
                 else if (level.IsAvailable(trap.x - 1, trap.y))
                 {
                     level.spikeObject = new MapObject(level, "spike" + spikeCount + trap._name, trap.x - 1, trap.y, Level.mapSymbols[Level.symbolEnum.spikeSymbol]);
                     level.SetGrid(level.spikeObject.x, level.spikeObject.y, level.spikeObject);
                     level.mapObjects.Add(level.spikeObject);
+                    continue;
                 }
             }
 
@@ -274,6 +280,7 @@ namespace No_Consolation
 
         public void Shop()
         {
+            bool firstTime = true;
             bool inShop = true;
             string userinput;
             Level.ShopCounter += rand.Next(2, 5);
@@ -281,7 +288,7 @@ namespace No_Consolation
             {
                 Console.Clear();
                 player.DrawPlayerStats();
-                Console.WriteLine("HELLO I AM TEPPIE THE SHOPKEEPER WHAT WOOF YOU LIKE TO BUY?");
+                Console.WriteLine("HELLO I AM TEMMIE THE SHOPKEEPER WHAT WOOF YOU LIKE TO BUY?");
                 if (UtilityMethods.sadDog)
                 {
                     UtilityMethods.SadShopDog();
@@ -294,6 +301,11 @@ namespace No_Consolation
                 Console.WriteLine(response);
                 Console.WriteLine("-------------------------------------");
                 PrintShop();
+                if(firstTime)
+                {
+                    BeepMusic.DogSong();
+                    firstTime = false;
+                }
                 //reads user choice
                 userinput = Console.ReadLine();
 

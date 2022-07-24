@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace No_Consolation
 {
+
     public class Game
     {
         Level newLevel;
         Random random = new Random();
-        
 
         public void Play()
         {
@@ -34,9 +35,8 @@ namespace No_Consolation
                 if (Level.ShopCounter == 0)
                 {
                     // shop method
-                    LogHandler.Add("Shop Room" + " ShopCounter: " + Level.ShopCounter);
+                    LogHandler.Add("Shop Room");
                     interactions.Shop();
-
                 }
                 else
                 {
@@ -101,6 +101,7 @@ namespace No_Consolation
                     }
                 }
             }
+            End();
         }
 
         private static void EveryNewRoom(Player player)
@@ -175,9 +176,15 @@ namespace No_Consolation
             Play();
         }
 
-        
+        public void End()
+        {
+            Console.Clear();
+            Console.WriteLine("GAME OVER");
+            UtilityMethods.YouDied();
+            BeepMusic.MarioDeath();
+            Environment.Exit(0);
+        }
 
-        
 
         public void ExplantaionStation()
         {
@@ -235,7 +242,7 @@ namespace No_Consolation
             Console.WriteLine("Walls: " + Level.mapSymbols[Level.symbolEnum.horizontal] + " & " + Level.mapSymbols[Level.symbolEnum.vertical]);
             Console.WriteLine();
             Console.WriteLine("Traps are invisible, but when they are triggered they release Spikes around the Player");
-            Console.WriteLine("Movement with WASD");
+            Console.WriteLine("Movement with Arrow Keys");
             Console.WriteLine("Press Escape to open Menu");
             Console.WriteLine("Must kill the enemy to progress to the next room");
             Console.WriteLine();

@@ -27,7 +27,8 @@ namespace No_Consolation
 
         public static void ClearBlock(int x, int y)
         {
-            for(int i = 0; i < y; i++)
+            Console.CursorVisible = false;
+            for (int i = 0; i < y; i++)
             {
                 for(int j = 0; j < x; j++)
                 {

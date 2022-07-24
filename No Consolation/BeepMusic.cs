@@ -30,46 +30,62 @@ namespace No_Consolation
             Console.Beep(DO[oct4], 200);
         }
 
-        public static void PokemonBattle()
+        public static void CoinPickUp()
         {
-            Console.Beep(TI[oct2], 50);
-            Console.Beep(SO[oct4], 100);
-            Console.Beep(FA[oct4], 100);
-            Console.Beep(MI[oct4], 100);
-            Console.Beep(DO[oct3], 50);
-            Console.Beep(SO[oct4], 100);
-            Console.Beep(FA[oct4], 100);
-            Console.Beep(MI[oct4], 100);
-            Console.Beep(550, 50);
-            Console.Beep(SO[oct4], 100);
-            Console.Beep(FA[oct4], 100);
-            Console.Beep(MI[oct4], 100);
-            Console.Beep(RE[oct3], 50);
-            Console.Beep(SO[oct4], 100);
-            Console.Beep(FA[oct4], 100);
-            Console.Beep(MI[oct4], 100);
-            Console.Beep(620, 50);
-            Console.Beep(SO[oct4], 100);
-            Console.Beep(FA[oct4], 100);
-            Console.Beep(MI[oct4], 100);
-            Console.Beep(MI[oct3], 50);
-            Console.Beep(SO[oct4], 100);
-            Console.Beep(FA[oct4], 100);
-            Console.Beep(MI[oct4], 100);
-            Console.Beep(FA[oct3], 50);
-            Console.Beep(SO[oct4], 100);
-            Console.Beep(FA[oct4], 100);
-            Console.Beep(MI[oct4], 100);
-            Console.Beep(740, 50);
-            Console.Beep(SO[oct4], 100);
-            Console.Beep(FA[oct4], 100);
-            Console.Beep(MI[oct4], 100);
-            Console.Beep(SO[oct3], 50);
-            Console.Beep(SO[oct4], 50);
+            Console.Beep(TI[oct3], 100);
+            Console.Beep(MI[oct4], 200);
+        }
+
+        public static void DogSong()
+        {
+            Console.Beep(SO[oct3], 200);
+            Console.Beep(MI[oct3], 200);
+            Console.Beep(DO[oct3], 200);
+            Console.Beep(RE[oct3], 100);
+            Console.Beep(DO[oct3], 200);
+            Console.Beep(SO[oct2], 100);
+            Console.Beep(LA[oct2], 100);
+            Console.Beep(DO[oct3], 300);
+            Console.Beep(LA[oct2], 200);
+            Console.Beep(DO[oct3], 200);
+            Console.Beep(TI[oct2], 200);
+            Console.Beep(DO[oct3], 100);
+            Console.Beep(RE[oct3], 400);
+
+            Console.Beep(SO[oct3], 200);
+            Console.Beep(MI[oct3], 200);
+            Console.Beep(DO[oct3], 200);
+            Console.Beep(RE[oct3], 100);
+            Console.Beep(DO[oct3], 200);
+            Console.Beep(SO[oct2], 100);
+            Console.Beep(LA[oct2], 100);
+            Console.Beep(DO[oct3], 200);
+            Console.Beep(FA[oct3], 100);
+            Console.Beep(MI[oct3], 100);
+            Console.Beep(RE[oct3], 300);
+            Console.Beep(DO[oct3], 100);
+            Console.Beep(LA[oct2], 100);
+            Console.Beep(100, 100);
+            Console.Beep(LA[oct2], 100);
+            Console.Beep(DO[oct3], 100);
+            Console.Beep(100, 100);
+            Console.Beep(DO[oct3], 300);
 
         }
 
-        
+        public static void MarioDeath()
+        {
+            Console.Beep(TI[oct2], 400);
+            Console.Beep(FA[oct3], 400);
+            Console.Beep(FA[oct3], 200);
+            Console.Beep(FA[oct3], 200);
+            Console.Beep(MI[oct3], 300);
+            Console.Beep(RE[oct3], 300);
+            Console.Beep(DO[oct3], 300);
+            Console.Beep(MI[oct2], 200);
+            Console.Beep(MI[oct2], 200);
+            Console.Beep(DO[oct2], 400);
+        }
 
         public static void MortalKombat()
         {

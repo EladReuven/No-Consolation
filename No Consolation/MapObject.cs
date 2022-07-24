@@ -10,7 +10,7 @@ namespace No_Consolation
 
     public class MapObject
     {
-
+        
         // i know its public pls dont kill me
         public int[] _objectPos = new int[2];
         public int x, y, topLeftX, topLeftY, bottomRightX, bottomRightY;

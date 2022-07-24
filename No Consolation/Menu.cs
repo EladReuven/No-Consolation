@@ -51,6 +51,11 @@ namespace No_Consolation
                         inMenu = false;
                         Console.Clear();
                         break;
+                    case "6":
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        break;
                 }
             }
 
